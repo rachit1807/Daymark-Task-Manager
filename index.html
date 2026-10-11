@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3f5f4" />
+    <meta
+      name="description"
+      content="Daymark is a straightforward task manager for organizing and tracking work."
+    />
+    <title>Daymark | Task Manager</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="Daymark home">
+          <span class="brand-mark" aria-hidden="true">D</span>
+          <span class="brand-name">Daymark</span>
+        </a>
+        <div class="topbar-right">
+          <span class="today-pill"><span class="today-dot"></span><span id="today-label">Today</span></span>
+          <span class="saved-note">Stored locally</span>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">
+            <span class="theme-icon" aria-hidden="true">◐</span><span id="theme-label">Dark mode</span>
+          </button>
+        </div>
+      </header>
+
+      <main id="top">
+        <section class="welcome-row" aria-labelledby="welcome-title">
+          <div>
+            <p class="eyebrow">PERSONAL WORKSPACE</p>
+            <h1 id="welcome-title">Your tasks</h1>
+            <p class="welcome-copy">Keep priorities visible and move work forward.</p>
+          </div>
+        </section>
+
+        <section class="stats-grid" aria-label="Task summary">
+          <article class="stat-card stat-total">
+            <div class="stat-topline"><span class="stat-label">TOTAL TASKS</span></div>
+            <div class="stat-bottom"><strong id="total-count">0</strong><span>on your list</span></div>
+          </article>
+          <article class="stat-card stat-active">
+            <div class="stat-topline"><span class="stat-label">IN PROGRESS</span></div>
+            <div class="stat-bottom"><strong id="active-count">0</strong><span>still open</span></div>
+          </article>
+          <article class="stat-card stat-done">
+            <div class="stat-topline"><span class="stat-label">COMPLETED</span></div>
+            <div class="stat-bottom"><strong id="completed-count">0</strong><span>finished tasks</span></div>
+          </article>
+        </section>
+
+        <section class="workspace-grid" aria-label="Task workspace">
+          <div class="task-column">
+            <section class="quick-add panel" aria-labelledby="quick-add-title">
+              <div class="quick-add-heading">
+                <div><p class="section-kicker">CREATE</p><h2 id="quick-add-title">New task</h2></div>
+              </div>
+              <form id="task-form" class="task-form">
+                <label class="sr-only" for="task-title">Task title</label>
+                <div class="title-entry">
+                  <input id="task-title" name="title" type="text" maxlength="100" placeholder="Enter a task title" autocomplete="off" required />
+                  <button class="add-button" type="submit">Add task</button>
+                </div>
+                <details class="more-details">
+                  <summary><span aria-hidden="true">⌄</span> Add details, due date or priority</summary>
+                  <div class="optional-fields">
+                    <label class="note-field">Details <span class="optional-label">OPTIONAL</span>
+                      <textarea name="notes" rows="2" maxlength="240" placeholder="Add a note"></textarea>
+                    </label>
+                    <label class="date-field">Due date <span class="optional-label">OPTIONAL</span>
+                      <input name="dueDate" type="date" />
+                    </label>
+                    <label class="priority-field">Priority
+                      <select name="priority">
+                        <option value="normal">Normal</option>
+                        <option value="high">High</option>
+                        <option value="low">Low</option>
+                      </select>
+                    </label>
+                    <label class="category-field">Category
+                      <select name="category">
+                        <option value="general">General</option>
+                        <option value="work">Work</option>
+                        <option value="study">Study</option>
+                        <option value="personal">Personal</option>
+                      </select>
+                    </label>
+                  </div>
+                </details>
+              </form>
+            </section>
+
+            <section class="task-board" aria-labelledby="task-board-title">
+              <div class="board-heading">
+                <div>
+                  <p class="section-kicker">WORK QUEUE</p>
+                  <h2 id="task-board-title">Task list <span class="board-count" id="board-count">0</span></h2>
+                </div>
+                <button type="button" class="clear-completed" id="clear-completed" hidden>Remove completed</button>
+              </div>
+
+              <div class="board-tools">
+                <div class="view-tabs" role="group" aria-label="Show tasks">
+                  <button type="button" class="view-tab is-selected" data-filter="all" aria-pressed="true">All <span id="tab-all-count">0</span></button>
+                  <button type="button" class="view-tab" data-filter="active" aria-pressed="false">To do <span id="tab-active-count">0</span></button>
+                  <button type="button" class="view-tab" data-filter="completed" aria-pressed="false">Done <span id="tab-completed-count">0</span></button>
+                </div>
+                <label class="category-filter-label"><span class="sr-only">Filter by category</span>
+                  <select id="category-filter" aria-label="Filter by category">
+                    <option value="all">All categories</option>
+                    <option value="general">General</option>
+                    <option value="work">Work</option>
+                    <option value="study">Study</option>
+                    <option value="personal">Personal</option>
+                  </select>
+                </label>
+                <label class="search-box">
+                  <span aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14"><circle cx="6.8" cy="6.8" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m10.2 10.2 3.2 3.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="sr-only">Search tasks</span>
+                  <input type="search" id="task-search" placeholder="Search tasks" autocomplete="off" />
+                  <kbd>⌘ K</kbd>
+                </label>
+              </div>
+
+              <p class="board-hint" id="board-hint">Tasks are grouped by due date. Drag the handle to reorder within a section.</p>
+              <ul class="task-list" id="task-list" aria-live="polite" aria-relevant="additions removals text"></ul>
+              <div class="board-footer"><span id="board-footer-text">Your next steps will appear here.</span></div>
+            </section>
+          </div>
+
+          <aside class="sidebar">
+            <section class="summary-panel" aria-labelledby="summary-title">
+              <p class="sidebar-heading">OVERVIEW</p>
+              <h2 id="summary-title">Task summary</h2>
+              <div class="summary-list">
+                <div class="summary-row"><span>Total tasks</span><strong id="nav-all-count">0</strong></div>
+                <div class="summary-row"><span>In progress</span><strong id="nav-active-count">0</strong></div>
+                <div class="summary-row"><span>Completed</span><strong id="nav-completed-count">0</strong></div>
+              </div>
+            </section>
+
+            <section class="progress-card" aria-labelledby="progress-title">
+              <p class="progress-kicker">COMPLETION</p>
+              <h2 id="progress-title">Progress overview</h2>
+              <div class="progress-numbers"><strong id="progress-percent">0%</strong><span><b id="progress-done">0</b> of <b id="progress-total">0</b> done</span></div>
+              <div class="progress-track" role="progressbar" aria-label="Tasks completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar"><span id="progress-fill"></span></div>
+              <p class="progress-footnote" id="progress-message">Start with your first task.</p>
+            </section>
+
+            <section class="backup-panel" aria-labelledby="backup-title">
+              <p class="sidebar-heading">DATA</p>
+              <h2 id="backup-title">Backup tasks</h2>
+              <p class="backup-copy">Download a JSON copy of your tasks, or merge tasks from a previous backup.</p>
+              <div class="backup-actions">
+                <button class="secondary-button" id="export-button" type="button">Export backup</button>
+                <button class="secondary-button" id="import-button" type="button">Import backup</button>
+                <input id="import-file" type="file" accept=".json,application/json" hidden />
+              </div>
+            </section>
+
+            <p class="sidebar-footnote">Tasks are stored in this browser.</p>
+          </aside>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <span>DAYMARK <span class="footer-dot">·</span> PERSONAL TASK MANAGER</span>
+        <span>Saved in this browser</span>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden>
+      <span id="toast-message">Task removed</span><button type="button" id="undo-button">Undo</button>
+    </div>
+  </body>
+</html>
